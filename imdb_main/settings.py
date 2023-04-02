@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-(z(6)av$%*g@ga^bd6hy!7oyp3i4t&$e%d3d0_d^u*#dw)&gz!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["https://imdb-clone-production.up.railway.app"]
 
 
 # Application definition
