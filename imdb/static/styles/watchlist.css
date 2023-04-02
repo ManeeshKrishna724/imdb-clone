@@ -1,0 +1,27 @@
+.watchlist-container {
+    color: white;   
+}
+
+.c {
+    margin-bottom: 20px;
+    padding-left: 15px;
+    position: relative;
+}
+
+.item-link {
+    text-decoration: none;
+    color: white;
+}
+
+.item-link:hover {
+    color: blueviolet;
+}
+
+.close-img {
+    position: absolute;
+    right: 5px;
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+    
+}

@@ -1,0 +1,43 @@
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar:vertical {
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+.w { 
+    color: white;
+}
+.watch-trailer {
+    background-color: transparent;
+}
+
+.watch-trailer:hover {
+
+    background-color: gold;
+    color: black;
+
+}
+
+.d-img {
+    border: solid 0px transparent;
+    border-radius: 10px;
+}
+
+.d-img:hover {
+    opacity: 0.5;
+}
+
+.d-title:hover {
+    color: rgb(105, 105, 248);
+}
+
+.bg-b {
+    background-color: rgb(16, 15, 15);
+}

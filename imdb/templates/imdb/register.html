@@ -1,0 +1,31 @@
+{% extends 'imdb/main.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    {% block content %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}register{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/login.css' %}">
+</head>
+<body>
+    <form method="post">
+		{% csrf_token %}
+	<div class="login-block">
+		<h1>Create Account</h1>
+		<input type="text" required value="" placeholder="Username" id="id_username" name="username"/>
+		<input type="email" required value="" placeholder="Email" id="id_email" name="email"/>
+		<input type="password" required value="" placeholder="Password" id="id_password1" name="password1"/>
+    <input type="password" required value="" placeholder="Conform Password" id="password2" name="password2"/>
+
+		<button type="submit">Submit</button>
+	</div>
+	
+	</form>
+
+
+    {% endblock %}
+</body>
+</html>

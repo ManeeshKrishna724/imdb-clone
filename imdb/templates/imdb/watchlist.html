@@ -1,0 +1,56 @@
+{% extends 'imdb/main.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    {% block content %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}watchlist{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'styles/watchlist.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+</head>
+<body>
+    <div class="watchlist-container">
+        <div style="padding: 20px;">
+            <span style="font-weight: 500; font-size: 25px;">Watchlist</span>
+        {% for m_s in list %}
+            
+            <div class="c" id="{{ m_s.id }}">
+                <hr>
+                <a class="item-link" href="{% url 'search' m_s.movie_show m_s.year %}">
+                    <span style="display: block; width: 90%;word-wrap: break-word;">{{ m_s.movie_show }}</span>
+                    <span>{{ m_s.year }}</span>
+                </a>
+                
+                <input name="remove" onclick="remove_item('{{ m_s.id }}')" data-id="{{ m_s.id }}" id="remove" type="image" class="close-img" src="{% static 'img/x.svg' %}"></input>
+                
+                
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</body>
+<script>
+    function remove_item(item_id) {
+
+        $.ajax({
+
+        type:"POST",
+        url: "{% url 'watchlist' %}",
+        data: {
+            id:item_id,
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        },
+        success:function(){
+            document.getElementById(''+item_id).remove();
+        }
+
+        });
+        
+    }
+</script>
+
+{% endblock %}
+</html>

@@ -1,0 +1,129 @@
+{% extends 'imdb/main.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block content %}
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}home{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'styles/home.css' %}">
+    
+</head>
+<body>
+    
+        
+            
+            <div style="margin-left: 10px;margin-top: 10px;">
+
+
+
+                <div style="margin-top: 30px;">
+                    <span style="color: gold;font-size: 20px;">•</span>
+                    <span style="font-weight: 500; font-size: 25px;" class="w">POPULAR IN THEATRE</span>
+                </div>
+
+                <div style="overflow: scroll; overflow-y: hidden;">
+
+                    <div style="display:inline-flex;">
+                        {% for n,i,r,y in popular_in_theatre %}
+                            
+                            <a href="{% url 'search' n y %}"style="text-decoration: none;">
+                                <div class="w" style="width: 250px;cursor: pointer; padding: 15px;">
+                                    
+                                    <img src="{{ i }}" style="width:200px;height: 300px;" class="card-img d-img">
+                                    <div class="card-body">
+                                        <span class="card-title w d-title">{{ n }} {{y}} <br> {{ r }}/10</span>
+                                    </div>
+                                    
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+
+                
+                <div style="margin-top: 30px;">
+                    <span style="color: gold;font-size: 20px;">•</span>
+                    <span style="font-weight: 500; font-size: 25px;" class="w">TRENDING THIS WEEK</span>
+                </div>
+
+                <div style="overflow: scroll; overflow-y: hidden;">
+
+                    <div style="display:inline-flex;">
+                        {% for n,i,r,y in trending_this_week %}
+                            <a href="{% url 'search' n y %}"style="text-decoration: none;">
+                            <div class="w" style="width: 250px;cursor: pointer; padding: 15px;">
+                                
+                                <img src="{{ i }}" style="width:200px;height: 300px;" class="card-img d-img">
+                                <div class="card-body">
+                                    <span class="card-title w d-title">{{ n }} {{y}} <br>  {{ r }}/10</span>
+                                    
+                                </div>
+                                
+                            </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            
+
+                <div style="margin-top: 30px;">
+                    <span style="color: gold;font-size: 20px;">•</span>
+                    <span style="font-weight: 500; font-size: 25px;" class="w">POPULAR MOVIES</span>
+                </div>
+
+                <div style="overflow: scroll; overflow-y: hidden;">
+
+                    <div style="display:inline-flex;">
+                        {% for n,i,r,y in popular_movies %}
+                            <a href="{% url 'search' n y %}"style="text-decoration: none;">
+                            <div class="w" style="width: 250px;cursor: pointer; padding: 15px;">
+                                
+                                <img src="{{ i }}" style="width:200px;height: 300px;" class="card-img d-img">
+                                <div class="card-body">
+                                    <span class="card-title w d-title">{{ n }} {{y}} <br>  {{ r }}/10</span>
+                                    
+                                </div>
+                                
+                            </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+
+                <div style="margin-top: 30px;">
+                    <span style="color: gold;font-size: 20px;">•</span>
+                    <span style="font-weight: 500; font-size: 25px;" class="w">POPULAR TV SHOWS</span>
+                </div>
+
+                <div style="overflow: scroll; overflow-y: hidden;">
+
+                    <div style="display:inline-flex;">
+                        {% for n,i,r,y in popular_shows %}
+                            
+                            <a href="{% url 'search' n y %}"style="text-decoration: none;">
+                            <div class="w" style="width: 250px;cursor: pointer; padding: 15px;">
+                                
+                                <img src="{{ i }}" style="width:200px;height: 300px;" class="card-img d-img">
+                                <div class="card-body">
+                                    <span class="card-title w d-title">{{ n }} {{y}} <br>  {{ r }}/10</span>
+                                    
+                                </div>
+                                
+                            </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+
+            </div>
+        
+    
+</body>
+{% endblock %}
+</html>

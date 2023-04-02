@@ -1,0 +1,92 @@
+{% extends 'imdb/main.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    {% block content %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>search</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+</head>
+<body>
+  <style>
+    .watchlist-btn {
+      position: absolute;
+      right: 5px; 
+      padding: 5px 10px 5px 10px; 
+      color: white;
+    }
+
+  </style>
+    
+        <div class="mb-3 text-white" style="position: relative;">
+            
+            <div class="row g-0" style="padding-bottom: 50px;">
+              <div class="col-md-4">
+                <img src="{{movie_show.poster}}" class="img-fluid rounded-start" alt="...">
+              </div>
+              <div style="padding-left: 30px; padding-top: 30px;" class="col-md-8">
+                <div class="card-body w" style="position: relative;">
+                    
+                    
+                  {% if request.user.is_authenticated %}
+                    {% if in_watchlist %}
+                    
+                      <input id="unsave" style="width: 70px;height: 70px;" type="image" onclick="save_unsave('{{movie_show.title}}','{{ movie_show.year }}','unsave')" src="{% static 'img/bookmark_added.svg' %}" name="unsave" class="watchlist-btn">
+                      <input id="save" style="display: none;" type="image" onclick="save_unsave('{{movie_show.title}}','{{movie_show.year}}','save')" name="save" src="{% static 'img/bookmark.svg' %}" class="watchlist-btn">
+                    {% else %}
+                      <input id="save" type="image" onclick="save_unsave('{{movie_show.title}}','{{movie_show.year}}','save')" name="save" src="{% static 'img/bookmark.svg' %}" class="watchlist-btn">
+                      <input id="unsave" style="display: none;width: 70px;height: 70px;" type="image" onclick="save_unsave('{{movie_show.title}}','{{ movie_show.year }}','unsave')" src="{% static 'img/bookmark_added.svg' %}" name="unsave" class="watchlist-btn">
+                    {% endif %}
+                  {% else %}
+                    <a style="text-decoration: none;" href="{% url 'login' %}" name="save" class="watchlist-btn"><input id="unsave" type="image" onclick="save_unsave('{{movie_show.title}}','{{ movie_show.year }}','unsave')" src="{% static 'img/bookmark.svg' %}" name="unsave" class="watchlist-btn"></a>
+                  {% endif %}
+                    
+                    
+                  <h4 class="card-title w">{{ movie_show.title }} ({{ movie_show.year }})</h4>
+                  <p class="card-text">Imdb Rating : {{ movie_show.imdb_rating }} Metascore : {{ movie_show.metascore }}</p>
+                  <p class="card-text">{{ movie_show.genre }}</p>
+                  <p class="card-text">Plot : {{ movie_show.plot }}</p>
+                  <p class="card-text">Director : {{ movie_show.director }}</p>
+                  <p class="card-text">Awards : {{ movie_show.awards }}</p>
+
+                </div>
+              </div>
+            </div>
+          </div>
+    
+</body>
+<script>
+  function save_unsave(name,year,type) {
+    $.ajax({
+      type : "POST",
+      url : "/search/"+name+"/"+year,
+      data : {
+        type : type,
+        name : name,
+        year : year,
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+      },
+      success : function() {
+        if (type == 'save') {
+          document.getElementById("save").style.display = "none"
+
+          document.getElementById("unsave").style.display = "block"
+        }
+        else if (type == 'unsave') {
+          document.getElementById("unsave").style.display = "none"
+          document.getElementById("save").style.display = "block"
+        }
+      }
+
+    })
+  }
+
+
+
+</script>
+{% endblock %}
+</html>

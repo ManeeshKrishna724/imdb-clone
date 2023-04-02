@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+</head>
+<style>
+  ::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar:vertical {
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+
+
+}
+
+.sugg-poster:hover {
+  opacity: 0.5;
+}
+.sugg-details:hover {
+  color: blueviolet;
+}
+</style>
+<body> 
+  
+    <nav style="background-color: rgb(16, 15, 15);" class="navbar">
+        <div class="container-fluid">
+          
+          <a href="{% url 'home' %}" style="color: #f5c518;font-weight:400;" class="navbar-brand">IMDb</a>
+          {% if request.path != '/login' and request.path != '/register' %}
+            <div style="width: 67%; margin: auto;position: relative;" class="d-flex">
+              {% csrf_token %}
+              <input autocomplete="off" class="form-control me-2" id="query" name="query" type="search" placeholder="Search">
+              <input onclick="result_sugg()" style="position: absolute;right: 5px;" type="image" alt="submit" src="{% static 'img/search.svg' %}">
+            </div>
+            <div id="sigg-field-cont" style="display: none; height: 550px; overflow: scroll; z-index: 1; color: aliceblue;position: absolute;top: 45px; left:60px;right: 0; background-color: rgb(42, 40, 40); width: 63%; margin: 0 auto;" class="sugg">
+              <img onclick="close_sugg()" style="height: 20px; width: 20px; margin: 10px; float: right;cursor: pointer;" src="{% static 'img/x.svg' %}">
+              <div style="margin-top: 30px;" id="sugg-field">
+
+              </div>
+            </div>
+          {% endif %}
+          <a href="{% url 'watchlist' %}" style="margin-left: 5px; position: absolute;right: 0;" class="navbar-brand">
+            <img style="height: 35px; width: 35px;" src="{% static 'img/bookmark.svg' %}">
+          </a>
+        </div>
+    </nav>
+</body>
+<script>
+  function result_sugg() {
+    $.ajax({
+      type: "POST",
+      url: "{% url 'result_suggestion' %}",
+      data : {
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+        query : document.getElementById("query").value,
+        
+      },
+      success: function(data) {
+        document.getElementById("sugg-field").innerHTML = ""
+        document.getElementById("sigg-field-cont").style.display = "block";
+        let i = 0
+        while (i < data.titles.length) {
+          document.getElementById("sugg-field").innerHTML+=`<div>
+              <a href="/search/${data.titles[i]}/${data.years[i]}" style="text-decoration:none;color:white;">
+              <div style="display:flex;flex-direction:row; margin-bottom:20px;">
+                <div>
+                  <img class="sugg-poster" style="height:150px;width:100px;" src=${data.posters[i]}>
+                </div>
+                <div class="sugg-details" style="margin-left:25px">
+                  <h5>${data.titles[i]}</h5>
+                  <p>${data.years[i]}</p>
+                </div>
+              </div></a>`;
+          i = i+1;
+        }
+        
+      }
+
+    });
+    
+  }
+
+  function close_sugg() {
+    document.getElementById("sigg-field-cont").style.display = "none";
+  }
+</script>
+</html>
