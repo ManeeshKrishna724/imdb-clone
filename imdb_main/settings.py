@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'imdb'
+    'imdb',
+    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
@@ -120,6 +121,7 @@ USE_TZ = True
 
 STATIC_ROOT = BASE_DIR / 'imdb/staticfiles'
 STATIC_URL = 'static/'
+STATICFILES_STORAGE ="whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATICFILES_DIR = [
     BASE_DIR / 'imdb/static'
     ]
