@@ -49,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = 'imdb_main.urls'
@@ -120,10 +121,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_ROOT = BASE_DIR / 'imdb/staticfiles'
-STATIC_URL = 'staticfiles/'
+STATIC_URL = 'static/'
 STATICFILES_STORAGE ="whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATICFILES_DIR = [
-    BASE_DIR / 'imdb/staticfiles'
+    BASE_DIR / 'imdb/static'
     ]
 
 # Default primary key field type
