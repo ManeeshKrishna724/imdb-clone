@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-(z(6)av$%*g@ga^bd6hy!7oyp3i4t&$e%d3d0_d^u*#dw)&gz!
 DEBUG = True
 
 ALLOWED_HOSTS = ["imdb-clone-production.up.railway.app"]
+CSRF_TRUSTED_ORIGINS = ["imdb-clone-production.up.railway.app"]
 
 
 # Application definition
