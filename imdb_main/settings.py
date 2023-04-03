@@ -25,8 +25,8 @@ SECRET_KEY = 'django-insecure-(z(6)av$%*g@ga^bd6hy!7oyp3i4t&$e%d3d0_d^u*#dw)&gz!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["imdb-clone-production.up.railway.app"]
-CSRF_TRUSTED_ORIGINS = ["https://imdb-clone-production.up.railway.app"]
+ALLOWED_HOSTS = ["imdb-clone-production.up.railway.app","127.0.0.1","192.168.1.7"]
+CSRF_TRUSTED_ORIGINS = ["https://imdb-clone-production.up.railway.app","https://127.0.0.1:800","http://192.168.1.7"]
 
 
 # Application definition
@@ -132,3 +132,12 @@ STATICFILES_DIR = [
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'pitbullbrowser724@gmail.com'
+EMAIL_HOST_PASSWORD = 'zxtxsklpwljrqngv'
+

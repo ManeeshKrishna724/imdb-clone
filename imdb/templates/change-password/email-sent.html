@@ -1,0 +1,39 @@
+{% extends 'imdb/main.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{% block content %}
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title><title>{% block title %}email sent {% endblock %}</title></title>
+</head>
+<body>
+
+
+          
+	{% if messages %}
+	{% for msg in messages %}
+
+		<div class="alert alert-warning alert-dismissible fade show" role="alert" style="width: 50%; margin: auto;">
+			<strong>{{ msg }}.</strong>
+			<div class="align-middle">
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+		</div>
+
+	{% endfor %}
+	{% endif %}
+
+
+	<!--Reset Password-->
+	<div class="container p-5" style="color: white;">
+  	 	<h2 class="font-weight-bold mt-3">Password Reset Send</h2>
+		<hr>
+		<p>We've emailed you instructions for setting your password, if an account exists with the email you entered. You should receive them shortly.<br>If you don’t receive an email, please make sure you’ve entered the address you registered with, and check your spam folder.</p>
+        
+  	</div> 
+
+{% endblock %}
+</body>
+</html>

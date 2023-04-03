@@ -15,8 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from django.contrib.auth import views as auth_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("",include("imdb.urls"))
+    path("",include("imdb.urls")),
+    
+    path('change-password/password_reset_confirm/<str:uidb64>/<str:token>',auth_view.PasswordResetConfirmView.as_view(template_name='change-password/new-password.html'),name='password_reset_confirm'),
+    path('change-password/password_reset_done',auth_view.PasswordResetDoneView.as_view(template_name='change-password/email-sent.html'),name="password_reset_done"),
+    path('change-password/password_reset_complete',auth_view.PasswordResetCompleteView.as_view(template_name='change-password/password-reset-complete.html'),name="password_reset_complete")
 ]

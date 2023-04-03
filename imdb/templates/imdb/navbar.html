@@ -27,9 +27,57 @@
 .sugg-poster:hover {
   opacity: 0.5;
 }
+.drop-itm:hover {
+  color: blueviolet;
+}
 .sugg-details:hover {
   color: blueviolet;
 }
+.search-field:hover {
+  border : 1px solid blueviolet;
+}
+.logout-container {
+  color: white;
+  background-color: rgb(37, 35, 35);;
+  z-index: 10;
+  width: 90%;
+  height: fit-content;
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  
+}
+
+.logout-conf-btn {
+  padding: 5px 10px 5px 10px;
+  border: 0px solid rgb(255, 255, 255);
+  border-radius: 5px;
+  background: gold;
+  margin: 20px;
+}
+
+.delete-conf-btn {
+  padding: 5px 10px 5px 10px;
+  border: 0px solid rgb(255, 255, 255);
+  border-radius: 5px;
+  background: rgb(185, 0, 0);
+  margin: 20px;
+}
+
+.password-input {
+  text-align: start;
+  margin-top: 10px;
+  position: relative;
+  padding: 10px;
+  width: 100%;
+  margin: auto;
+  border : 0px solid black;
+  border-radius: 5px;
+}
+
 </style>
 <body> 
   
@@ -37,12 +85,12 @@
         <div class="container-fluid">
           
           <a href="{% url 'home' %}" style="color: #f5c518;font-weight:400;" class="navbar-brand">IMDb</a>
-          {% if request.path != '/login' and request.path != '/register' %}
-            <div style="width: 67%; margin: auto;position: relative;" class="d-flex">
+          {% if request.path != '/login' and request.path != '/register' and 'change-password' not in request.path %}
+            <form onsubmit="result_sugg()" id="search-form" style="width: 67%; margin: auto;position: relative;" class="d-flex">
               {% csrf_token %}
-              <input autocomplete="off" class="form-control me-2" id="query" name="query" type="search" placeholder="Search">
-              <input onclick="result_sugg()" style="position: absolute;right: 5px;" type="image" alt="submit" src="{% static 'img/search.svg' %}">
-            </div>
+              <input style="width:100%;padding: 7px;border: solid 0px black;border-radius: 5px;" autocomplete="off" class="search-field" id="query" name="query" type="search" placeholder="Search">
+              <input style="position: absolute;right: 5px;" type="image" src="{% static 'img/search.svg' %}">
+            </form>
             <div id="sigg-field-cont" style="display: none; height: 550px; overflow: scroll; z-index: 1; color: aliceblue;position: absolute;top: 45px; left:60px;right: 0; background-color: rgb(42, 40, 40); width: 63%; margin: 0 auto;" class="sugg">
               <img onclick="close_sugg()" style="height: 20px; width: 20px; margin: 10px; float: right;cursor: pointer;" src="{% static 'img/x.svg' %}">
               <div style="margin-top: 30px;" id="sugg-field">
@@ -50,14 +98,126 @@
               </div>
             </div>
           {% endif %}
-          <a href="{% url 'watchlist' %}" style="margin-left: 5px; position: absolute;right: 0;" class="navbar-brand">
-            <img style="height: 35px; width: 35px;" src="{% static 'img/bookmark.svg' %}">
-          </a>
+          <div style="position: absolute;right: 5px; cursor: pointer;">
+            <img onclick="dropdown_on_off()" style="height: 30px; width: 30px;" src="{% static 'img/menu.svg' %}">
+            
+            <div id="drpdown" onmouseleave="dropdown_on_off()" class="drpdown" style="z-index: 99; padding: 20px; display: none;flex-direction: column; color: white; width: fit-content; border: solid 0px black; border-radius: 10px; position: absolute;right: 20px; background-color:rgb(42, 40, 40);">
+              <a style="color: white;" href="{% url 'watchlist' %}"  class="navbar-brand drop-item">
+                <span class="drop-itm" style="padding-left: 10px;">Watchlist</span>
+              </a>
+              {% if request.user.is_authenticated %}
+                <a style="color: white;"  class="navbar-brand drop-item">
+                  <span style="padding-left: 10px;" class="drop-itm" onclick="close_open_logout_prompt('open')">Logout</span>
+                </a>
+                <a style="color: rgb(255, 0, 0);"  class="navbar-brand drop-item">
+                  <span style="padding-left: 10px;" class="drop-itm" onclick="close_open_delete_prompt('open')">Delete Account</span>
+                </a>
+              {% else %}
+                <a class="navbar-brand" style="text-decoration:none; color: white;padding-left: 10px;" href="{% url 'login' %}">
+                  <span class="drop-itm">Login</span>
+                </a>
+              {% endif %}
+              
+              
+            </div>
+          </div>
         </div>
     </nav>
+
+    <div style="display: none;" id="logout-container" class="logout-container">
+      <div style="padding: 20px;">
+        <h3 style="font-size: 20px;text-align: center;">Are you sure you want to logout ?</h3>
+        <div style="display: flex;flex-direction: row;justify-content:center; margin: auto;padding: 20px;">
+          <button onclick="logout_user()" class="logout-conf-btn">Yes</button>
+          <button onclick="close_open_logout_prompt('close')" class="logout-conf-btn">No</button>
+        </div>
+      </div>
+    </div>
+
+
+    <div style="display: none;" id="delete-container" class="logout-container">
+      <div style="padding: 20px;">
+        <h3 style="font-size: 20px;">Are you sure you want to Delete your account ?</h3><br>
+        <input name="entered_password" class="password-input" type="password" placeholder="Enter your password to continue">
+        <div style="display: flex;flex-direction: row;justify-content:center; margin: auto;padding: 20px;">
+          <button onclick="delete_user()" class="delete-conf-btn">Continue</button>
+          <button onclick="close_open_delete_prompt('close')" class="logout-conf-btn">Cancel</button>
+        </div>
+      </div>
+    </div>
 </body>
 <script>
+
+  function delete_user() {
+    $.ajax({
+      type: "POST",
+      url: "{% url 'delete_user' %}",
+      data : {
+        csrfmiddlewaretoken : $('input[name=csrfmiddlewaretoken]').val(),
+        entered_password : $('input[name=entered_password]').val()
+      },
+      success:function() {
+        document.getElementById("delete-container").style.display = "none";
+        location.reload()
+      }
+    })
+  }
+
+
+
+  function close_open_delete_prompt(type) {
+    if (type == "close") {
+      document.getElementById("delete-container").style.display = "none";
+    }
+    else {
+      document.getElementById("delete-container").style.display = "block";
+    }
+  }
+
+
+  function logout_user() {
+    $.ajax({
+      type: "POST",
+      url: "{% url 'logout_user' %}",
+      data : {
+        csrfmiddlewaretoken : $('input[name=csrfmiddlewaretoken]').val(),
+      },
+      success:function(data) {
+        document.getElementById("logout-container").style.display = "none";
+      }
+    })
+  }
+
+
+  function dropdown_on_off() {
+    cont = document.getElementById("drpdown").style.display
+    if (cont=="none") {
+      document.getElementById("drpdown").style.display = "block";
+    }
+    else {
+      document.getElementById("drpdown").style.display = "none";
+    }
+  
+  }
+
+  function close_open_logout_prompt(type) {
+    
+    if (type == "close") {
+      document.getElementById("logout-container").style.display = "none";
+    }
+    else {
+      document.getElementById("logout-container").style.display = "block";
+    }
+  }
+
+  function dropdown_activate() {
+    
+    document.getElementById("drpdown").style.display = "flex";
+  }
+
+
   function result_sugg() {
+    event.preventDefault();
     $.ajax({
       type: "POST",
       url: "{% url 'result_suggestion' %}",

@@ -22,8 +22,8 @@
                 <input type="text" value="" placeholder="Username" id="username" name="username"/>
                 <input type="password" value="" placeholder="Password" id="password" name="password"/>
                 <button type="submit">Submit</button>
-                <a class="sign-up-link" href="" >Sign Up</a><br>
-                <a class="forgot-p-link" href="" >Forgot Password?</a>
+                <a class="sign-up-link" href="{% url 'register' %}" >Don't have an account ? Sign Up</a><br>
+                <a class="forgot-p-link" href="{% url 'change-password' %}" >Forgot Password?</a>
             </div>
         
         </form>

@@ -2,16 +2,31 @@ from django.shortcuts import render,redirect,HttpResponse
 from django.http import JsonResponse
 from .get_det import imdb
 from .models import Watchlist,User
+from django.contrib.auth.forms import PasswordResetForm
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login,logout
 from .forms import CreateUserForm
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
+from django.core.mail import EmailMessage
 
 # Create your views here.
-def home(request):
-    if request.method == "POST":
-        q = request.POST.get("query")
-        return redirect("search",q,None)
+def mail(message,recipient_list):
+    email = EmailMessage(
+    'From PITBULL',
+    message,
+    settings.EMAIL_HOST_USER,
+    recipient_list,
+    )
+    
+    email.send(fail_silently=False)
 
+
+def home(request):
     trending_this_week_url = "https://api.themoviedb.org/3/trending/all/day?api_key=b8da327ca3bd7ccdc7dfdba3de3184ec"
     popular_movies_url = "https://api.themoviedb.org/3/movie/popular?api_key=b8da327ca3bd7ccdc7dfdba3de3184ec&language=en-US&page=1"
     popular_in_theatre_url = "https://api.themoviedb.org/3/movie/now_playing?api_key=b8da327ca3bd7ccdc7dfdba3de3184ec&language=en-US&page=1"
@@ -135,3 +150,47 @@ def watchlist(request):
 def result_suggestion(request):
     results = imdb().search_sugg(request.POST.get('query'))
     return JsonResponse(results)
+
+def logout_user(request):
+    logout(request)
+    return HttpResponse("success")
+
+def password_reset(request):
+    if request.method == 'POST':
+        password_reset_form = PasswordResetForm(request.POST)
+        if password_reset_form.is_valid():
+            entered_email = request.POST.get('email')
+            associated_users = User.objects.filter(email=entered_email)
+            if associated_users.exists():
+                for user in associated_users:
+                    contexts = {
+                        "email":user.email,
+                        'domain':request.META['HTTP_HOST'],
+                        'site_name': 'PITBULL',
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "user": user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                    }
+                    content = render_to_string('change-password/mail-content.txt',contexts)
+                    mail(content,[user.email])
+                    return redirect('password_reset_done')
+            else:
+                messages.error(request,"The email you entered does'nt exists")
+    password_reset_form = PasswordResetForm()
+    return render(request,'change-password/change-password.html',{"form":password_reset_form})
+
+
+def delete_user(request):
+    if request.method == 'POST':
+        entered_password = request.POST.get('entered_password')
+        user = User.objects.get(id=request.user.id)
+        if user.check_password(entered_password):
+            user.delete()
+            messages.success(request,"Successfully deleted your account")
+            
+        else:
+            messages.warning(request,"The password you entered is invalid")
+        
+        return HttpResponse("success")
+    
